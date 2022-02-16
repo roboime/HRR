@@ -1,4 +1,6 @@
 close all; clc;
+addpath("Subsystems\");
+addpath("STEP_Files\");
 run('Simulador_DataFile.m');
 
 %% Enviorment varialbles
@@ -20,3 +22,4 @@ switch stepType
         zHeigths = [0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0;];
 end
 
+sim('Simulador.slx');
