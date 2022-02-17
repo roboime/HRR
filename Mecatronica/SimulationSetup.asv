@@ -1,4 +1,4 @@
-close all; clc;
+%close all; clc;
 addpath("Subsystems\");
 addpath("STEP_Files\");
 run('Simulador_DataFile.m');
@@ -22,29 +22,11 @@ switch stepType
     otherwise
         zHeigths = [0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0;];
 end
-%% RL stuff
-Ts = 25;
-mdl = 'Simulador';
-obsInfo = rlNumericSpec([28 1]);
-actInfo = rlNumericSpec([12 1]);
-actInfo.LowerLimit = 0;
-actInfo.UpperLimit = 0;
-obsInfo.Name = 'observations';
-actInfo.Name = 'position';
-agentBlk = [mdl '/RL Agent'];
-env = rlSimulinkEnv(mdl,agentBlk,obsInfo,actInfo);
-agent = rlPGAgent(obsInfo,actInfo);
-
-
-
 %% info
 %{
 the max input frequency is 200Hz
-AX max angular velocity is 59 (when charged) (do bentch test to verify)
-MX max angular velocity is 55 RPM (when charged) (do bentch test to verify)
-Max torc AX12 1.5 Nm
-Max torc MX28 2.5 Nm
-%}
+max angular velocity is 
+
 
 
 %sim('Simulador.slx');
