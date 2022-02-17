@@ -22,8 +22,8 @@ switch stepType
     otherwise
         zHeigths = [0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0;];
 end
+%%
 
 
 
-
-sim('Simulador.slx');
+%sim('Simulador.slx');
