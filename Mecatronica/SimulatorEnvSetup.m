@@ -1,8 +1,10 @@
-close all; clc;
+clear; close all; clc;
+
 %% Robot Paramaters and Folder
 addpath("Subsystems\");
 addpath("STEP_Files\");
-run('Simulador_DataFile.m');
+run('SimuladorDataFile.m');
+
 %% Model parameters
 startHeight = 0.26;
 yGridVector = [-.5 .5];
@@ -21,6 +23,7 @@ switch stepType
     otherwise
         zHeigths = [0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0;];
 end
+
 %% RL parameters
 Ts = 0.0025; % Agent sample time
 Tf = 10;    % Simulation end time
