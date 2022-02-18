@@ -1,7 +1,7 @@
-close all; clc;
+clear; close all; clc;
 addpath("Subsystems\");
 addpath("STEP_Files\");
-run('Simulador_DataFile.m');
+run('SimulatorDataFile.m');
 
 %% Enviorment varialbles
 % Ground Variables
@@ -22,8 +22,3 @@ switch stepType
     otherwise
         zHeigths = [0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0;];
 end
-%%
-
-
-
-%sim('Simulador.slx');
