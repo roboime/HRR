@@ -32,24 +32,28 @@ rng(0);
 
 %% RL Enviorment Setup
 mdl = 'Simulator';
-numObservations = 36;
+numObservations = 33;
 numActions = 12;
 %open_system(mdl)
 obsInfo = rlNumericSpec([numObservations 1]);
+obsInfo.Name = 'Observarion';
 actInfo = rlNumericSpec([numActions 1], LowerLimit = -pi, UpperLimit = pi);
+actInfo.Name = 'Action';
 agentBlk = [mdl '/RL Agent'];
 env = rlSimulinkEnv(mdl,agentBlk,obsInfo,actInfo);
 % env.ResetFcn = @(in)localResetFcn(in);
 
 %% RL Agent Setup
+% Critic
+useGPU = true;
 statePath = [
     featureInputLayer(numObservations,'Normalization','none','Name','State')
-    fullyConnectedLayer(50,'Name','CriticStateFC1')
+    fullyConnectedLayer(400,'Name','CriticStateFC1')
     reluLayer('Name','CriticRelu1')
-    fullyConnectedLayer(25,'Name','CriticStateFC2')];
+    fullyConnectedLayer(300,'Name','CriticStateFC2')];
 actionPath = [
     featureInputLayer(numActions,'Normalization','none','Name','Action')
-    fullyConnectedLayer(25,'Name','CriticActionFC1')];
+    fullyConnectedLayer(300,'Name','CriticActionFC1')];
 commonPath = [
     additionLayer(2,'Name','add')
     reluLayer('Name','CriticCommonRelu')
@@ -62,22 +66,37 @@ criticNetwork = addLayers(criticNetwork,commonPath);
 criticNetwork = connectLayers(criticNetwork,'CriticStateFC2','add/in1');
 criticNetwork = connectLayers(criticNetwork,'CriticActionFC1','add/in2');
 
+
 %figure
 %plot(criticNetwork)
 
 criticOpts = rlRepresentationOptions('LearnRate',1e-03,'GradientThreshold',1);
+
+if useGPU
+   criticOpts.UseDevice = 'gpu'; 
+end
+
 critic = rlQValueRepresentation(criticNetwork,obsInfo,actInfo,'Observation',{'State'},'Action',{'Action'},criticOpts);  
+
+% Actor
 
 actorNetwork = [
     featureInputLayer(numObservations,'Normalization','none','Name','State')
-    fullyConnectedLayer(3, 'Name','actorFC')
-    tanhLayer('Name','actorTanh')
-    fullyConnectedLayer(numActions,'Name','Action')
+    fullyConnectedLayer(400, 'Name','ActorFC1')
+    reluLayer('Name','ActorRelu1')
+    fullyConnectedLayer(400, 'Name','ActorFC2')
+    reluLayer('Name','actorTanh')
+    fullyConnectedLayer(numActions,'Name','ActionFC3')
+    tanhLayer('Name','ActorTanh1')
     ];
 
 actorOptions = rlRepresentationOptions('LearnRate',1e-04,'GradientThreshold',1);
 
-actor = rlDeterministicActorRepresentation(actorNetwork,obsInfo,actInfo,'Observation',{'State'},'Action',{'Action'},actorOptions);
+if useGPU
+   actorOptions.UseDevice = 'gpu'; 
+end
+
+actor = rlDeterministicActorRepresentation(actorNetwork,obsInfo,actInfo,'Observation',{'State'},'Action',{'ActorTanh1'},actorOptions);
 
 agentOpts = rlDDPGAgentOptions(...
     'SampleTime',Ts,...
