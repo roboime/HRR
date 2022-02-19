@@ -22,3 +22,5 @@ switch stepType
     otherwise
         zHeigths = [0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0;];
 end
+
+%% RL Env Setup
