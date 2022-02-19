@@ -23,4 +23,94 @@ switch stepType
         zHeigths = [0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0;];
 end
 
-%% RL Env Setup
+%% Simulation Setup
+% Specify the simulation time Tf and the agent sample time Ts in seconds.
+Ts = 1.0;
+Tf = 200;
+% Fix the random generator seed for reproducibility.
+rng(0);
+
+%% RL Enviorment Setup
+mdl = 'Simulator';
+numObservations = 36;
+numActions = 12;
+%open_system(mdl)
+obsInfo = rlNumericSpec([numObservations 1]);
+actInfo = rlNumericSpec([numActions 1], LowerLimit = -pi, UpperLimit = pi);
+agentBlk = [mdl '/RL Agent'];
+env = rlSimulinkEnv(mdl,agentBlk,obsInfo,actInfo);
+% env.ResetFcn = @(in)localResetFcn(in);
+
+%% RL Agent Setup
+statePath = [
+    featureInputLayer(numObservations,'Normalization','none','Name','State')
+    fullyConnectedLayer(50,'Name','CriticStateFC1')
+    reluLayer('Name','CriticRelu1')
+    fullyConnectedLayer(25,'Name','CriticStateFC2')];
+actionPath = [
+    featureInputLayer(numActions,'Normalization','none','Name','Action')
+    fullyConnectedLayer(25,'Name','CriticActionFC1')];
+commonPath = [
+    additionLayer(2,'Name','add')
+    reluLayer('Name','CriticCommonRelu')
+    fullyConnectedLayer(1,'Name','CriticOutput')];
+
+criticNetwork = layerGraph();
+criticNetwork = addLayers(criticNetwork,statePath);
+criticNetwork = addLayers(criticNetwork,actionPath);
+criticNetwork = addLayers(criticNetwork,commonPath);
+criticNetwork = connectLayers(criticNetwork,'CriticStateFC2','add/in1');
+criticNetwork = connectLayers(criticNetwork,'CriticActionFC1','add/in2');
+
+%figure
+%plot(criticNetwork)
+
+criticOpts = rlRepresentationOptions('LearnRate',1e-03,'GradientThreshold',1);
+critic = rlQValueRepresentation(criticNetwork,obsInfo,actInfo,'Observation',{'State'},'Action',{'Action'},criticOpts);  
+
+actorNetwork = [
+    featureInputLayer(numObservations,'Normalization','none','Name','State')
+    fullyConnectedLayer(3, 'Name','actorFC')
+    tanhLayer('Name','actorTanh')
+    fullyConnectedLayer(numActions,'Name','Action')
+    ];
+
+actorOptions = rlRepresentationOptions('LearnRate',1e-04,'GradientThreshold',1);
+
+actor = rlDeterministicActorRepresentation(actorNetwork,obsInfo,actInfo,'Observation',{'State'},'Action',{'Action'},actorOptions);
+
+agentOpts = rlDDPGAgentOptions(...
+    'SampleTime',Ts,...
+    'TargetSmoothFactor',1e-3,...
+    'DiscountFactor',1.0, ...
+    'MiniBatchSize',64, ...
+    'ExperienceBufferLength',1e6); 
+agentOpts.NoiseOptions.Variance = 0.3;
+agentOpts.NoiseOptions.VarianceDecayRate = 1e-5;
+
+agent = rlDDPGAgent(actor,critic,agentOpts);
+
+%% Train Agents
+maxepisodes = 5000;
+maxsteps = ceil(Tf/Ts);
+trainOpts = rlTrainingOptions(...
+    'MaxEpisodes',maxepisodes, ...
+    'MaxStepsPerEpisode',maxsteps, ...
+    'ScoreAveragingWindowLength',20, ...
+    'Verbose',false, ...
+    'Plots','training-progress',...
+    'StopTrainingCriteria','AverageReward',...
+    'StopTrainingValue',800);
+
+doTraining = true;
+
+if doTraining
+    % Train the agent.
+    trainingStats = train(agent,env,trainOpts);
+else
+    % Load the pretrained agent for the example.
+    load('WaterTankDDPG.mat','agent')
+end
+
+
+
