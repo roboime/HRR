@@ -6,8 +6,10 @@
  */
 
 #include "Start.hpp"
+#include "Robot.hpp"
 
 void Start(){
+	Robot* robot = new Robot;
 	while (true){
 
 	}

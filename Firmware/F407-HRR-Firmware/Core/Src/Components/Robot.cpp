@@ -8,7 +8,7 @@
 #include "Robot.hpp"
 
 Robot::Robot() {
-	// TODO Auto-generated constructor stub
-
+	legs = new Dynamixel[12];
+	arms = new PWMServo[6];
 }
 

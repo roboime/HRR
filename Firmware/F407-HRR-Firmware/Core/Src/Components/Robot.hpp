@@ -9,10 +9,15 @@
 #define SRC_COMPONENTS_ROBOT_HPP_
 
 #include "main.h"
+#include "Dynamixel.hpp"
+#include "PWMServo.hpp"
 
 class Robot {
 public:
 	Robot();
+private:
+	Dynamixel* legs;
+	PWMServo* arms;
 };
 
 #endif /* SRC_COMPONENTS_ROBOT_HPP_ */
