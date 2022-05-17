@@ -12,13 +12,29 @@
 #include "Dynamixel.hpp"
 #include "PWMServo.hpp"
 
+
+
 class Robot {
 public:
+	enum stepTypeDef{
+		STEP_FORWARD = 0,
+		STEP_LEFT,
+		STEP_RIGHT,
+		STEP_STOP
+	};
+	bool ready = false;
 	Robot();
-	void setStepType(uint8_t stepType);
+	void init();
+	void controlCallback();
+	void setMovement(stepTypeDef step);
 private:
-	Dynamixel* legs[12];
-	PWMServo* arms[6];
+	static const uint32_t numLegMotors = 12;
+	static const uint32_t numArmMotors = 6;
+	static const uint32_t controlFreq = 400;
+	Dynamixel* legs[numLegMotors];
+	PWMServo* arms[numArmMotors];
+	float legsZeroArray[numLegMotors];
+	float armsZeroArray[numArmMotors];
 };
 
 #endif /* SRC_COMPONENTS_ROBOT_HPP_ */

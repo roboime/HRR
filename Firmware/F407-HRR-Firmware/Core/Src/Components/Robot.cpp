@@ -27,3 +27,16 @@ Robot::Robot() {
 	legs[11] = new Dynamixel(&huart6, 2);
 }
 
+void Robot::init(){
+	ready = true;
+}
+
+void Robot::controlCallback(){
+	for(uint32_t i=0; i<numLegMotors; i++){
+		legs[i]->move(0, 0);
+	}
+}
+
+void Robot::setMovement(stepTypeDef step){
+
+}

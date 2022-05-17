@@ -8,9 +8,21 @@
 #include "Start.hpp"
 #include "Robot.hpp"
 
-void Start(){
-	Robot* robot = new Robot;
-	while (true){
+extern TIM_HandleTypeDef htim6;
 
+Robot robot;
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	if(htim==&htim6){
+		if (robot.ready){
+			robot.controlCallback();	//Controle
+		}
+	}
+}
+
+void Start(){
+	robot.init();
+	while (true){
+		robot.setMovement(Robot::STEP_FORWARD);
 	}
 }
