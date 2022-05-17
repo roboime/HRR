@@ -15,9 +15,10 @@
 class Robot {
 public:
 	Robot();
+	void setStepType(uint8_t stepType);
 private:
-	Dynamixel* legs;
-	PWMServo* arms;
+	Dynamixel* legs[12];
+	PWMServo* arms[6];
 };
 
 #endif /* SRC_COMPONENTS_ROBOT_HPP_ */
