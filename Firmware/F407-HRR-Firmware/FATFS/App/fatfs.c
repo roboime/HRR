@@ -34,7 +34,8 @@ void MX_FATFS_Init(void)
 
   /* USER CODE BEGIN Init */
   /* additional user code for init */
-  f_mount(&SDFatFS, SDPath, 0);
+  FRESULT res;
+  res = f_mount(&SDFatFS, SDPath, 0);
   /* USER CODE END Init */
 }
 
