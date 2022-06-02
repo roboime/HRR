@@ -19,3 +19,26 @@ Controlar os motores AX-12A e MX-28T das pernas do robô por protocolo UART half 
 - [ ] Acelerômetro para detecção e tratamento de quedas
 - [ ] Medição de carga da bateria e desligamento em carga baixa
 - [ ] Gravação de log no cartão de memória
+
+### Periféricos e pinos
+
+| Periférico            | Pino MCU  | Função                        |
+| --------------------- | --------- | ----------------------------- |
+| TIM3 CHANNEL 1        | PB4       | PWM servo do braço            |
+| TIM3 CHANNEL 2        | PC7       | PWM servo do braço            |
+| TIM3 CHANNEL 3        | PB0       | PWM servo do braço            |
+| TIM3 CHANNEL 4        | PB1       | PWM servo do braço            |
+| TIM4 CHANNEL 3        | PB8       | PWM servo do braço            |
+| TIM4 CHANNEL 4        | PB9       | PWM servo do braço            |
+| TIM6                  |           | Interrupção de controle       |
+| ADC1 IN1              | PA1       | Medidor de carga da bateria   |
+| SDIO D0               | PC8       | Cartão de memória             |
+| SDIO CK               | PC12      | Cartão de memória             |
+| SDIO CMD              | PD2       | Cartão de memória             |
+| SDIO DETECT           | PC9       | Cartão de memória             |
+| UART4 TX              | PC10      | Comunicação com Raspberry Pi  |
+| UART4 RX              | PC11      | Comunicação com Raspberry Pi  |
+| USART1                | PB6       | Servos da perna               |
+| USART2                | PA2       | Servos da perna               |
+| USART3                | PD8       | Servos da perna               |
+| USART6                | PC6       | Servos da perna               |
