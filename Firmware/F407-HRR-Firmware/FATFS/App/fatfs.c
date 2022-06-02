@@ -34,8 +34,7 @@ void MX_FATFS_Init(void)
 
   /* USER CODE BEGIN Init */
   /* additional user code for init */
-  FRESULT res;
-  res = f_mount(&SDFatFS, SDPath, 0);
+  f_mount(&SDFatFS, SDPath, 0);	//Vai retornar FR_OK mesmo sem SD
   /* USER CODE END Init */
 }
 

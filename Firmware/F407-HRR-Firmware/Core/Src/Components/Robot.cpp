@@ -28,7 +28,21 @@ Robot::Robot() {
 }
 
 void Robot::init(){
-	ready = true;
+	FRESULT res[numStepTypes];
+	//TODO: Conferir os passos de transição 4 e 5
+	for (uint32_t i=0; i<numStepTypes; i++){
+		res[i] = f_open(&stepFile[i], stepFilePaths[i].c_str(), FA_OPEN_EXISTING | FA_READ);
+		if(res[i]){
+			if(res[i] == FR_NOT_READY){
+				//Sem SD
+				error(ERR_NO_SD);
+			}else if(res[i] == FR_NO_FILE || res[i] == FR_NO_PATH){
+				//Arquivo não encontrado
+				error(ERR_FILE_NOT_FOUND);
+			}
+		}
+	}
+	leds(status = STATUS_READY);
 }
 
 void Robot::controlCallback(){
@@ -39,4 +53,21 @@ void Robot::controlCallback(){
 
 void Robot::setMovement(stepTypeDef step){
 
+}
+
+void Robot::error(errorTypeDef error){
+	status = STATUS_ERROR;
+	while (true){
+		leds(error);
+		HAL_Delay(100);
+		leds(0);
+		HAL_Delay(100);
+	}
+}
+
+void Robot::leds(uint8_t binary){
+	HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, (GPIO_PinState)(binary & 1));
+	HAL_GPIO_WritePin(LD4_GPIO_Port, LD4_Pin, (GPIO_PinState)((binary>>1) & 1));
+	HAL_GPIO_WritePin(LD5_GPIO_Port, LD5_Pin, (GPIO_PinState)((binary>>2) & 1));
+	HAL_GPIO_WritePin(LD6_GPIO_Port, LD6_Pin, (GPIO_PinState)((binary>>3) & 1));
 }
