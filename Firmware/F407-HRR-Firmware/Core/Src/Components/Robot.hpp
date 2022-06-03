@@ -21,12 +21,15 @@ public:
 		STEP_FORWARD = 0,
 		STEP_LEFT,
 		STEP_RIGHT,
-		STEP_STOP
+		STEP_STOP,
+		STEP_LAST,
+		STEP_FIRST
 	};
 	enum errorTypeDef{
 		ERR_OK = 0,
 		ERR_NO_SD,
-		ERR_FILE_NOT_FOUND
+		ERR_FILE_NOT_FOUND,
+		ERR_LOW_BATTERY
 	};
 	enum statusTypeDef{
 		STATUS_NOT_INITIALIZED = 0,
