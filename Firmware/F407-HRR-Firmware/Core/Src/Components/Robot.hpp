@@ -46,12 +46,12 @@ private:
 	static const uint32_t controlFreq = 400;
 	static const uint32_t numStepTypes = 6;
 	const std::string stepFilePaths[numStepTypes] = {
-			"0:Steps/frente.csv",
-			"0:Steps/esquerda.csv",
-			"0:Steps/direita.csv",
-			"0:Steps/parado.csv",
-			"0:Steps/0-3.csv",
-			"0:Steps/3-0.csv"
+			"0:Steps/frente.bin",
+			"0:Steps/esquerda.bin",
+			"0:Steps/direita.bin",
+			"0:Steps/parado.bin",
+			"0:Steps/0-3.bin",
+			"0:Steps/3-0.bin"
 	};
 	FIL stepFile[numStepTypes];
 	Dynamixel* legs[numLegMotors];

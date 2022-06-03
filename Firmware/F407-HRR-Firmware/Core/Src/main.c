@@ -714,7 +714,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : SD_Detect_Pin */
   GPIO_InitStruct.Pin = SD_Detect_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(SD_Detect_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : MEMS_INT2_Pin */

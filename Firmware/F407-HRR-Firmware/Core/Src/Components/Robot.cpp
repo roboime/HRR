@@ -46,8 +46,10 @@ void Robot::init(){
 }
 
 void Robot::controlCallback(){
+	uint16_t data[numLegMotors][2];
 	for(uint32_t i=0; i<numLegMotors; i++){
-		legs[i]->move(0, 0);
+		//legs[i]->move(0, 0);
+		f_read(&stepFile[0], data[i], 4, NULL);
 	}
 }
 
