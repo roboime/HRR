@@ -7,6 +7,11 @@
 
 #include "Robot.hpp"
 
+#define RL 2200		//R3 da placa
+#define RH 10000	//R2 da placa
+#define VOLTAGE_CONVERSION (RL+RH)*3.3/(RL*4096)	//VDD = 3.3v em ADC 12 bits
+#define VOLTAGE_LOW 10.5	//Limite inferior da voltagem da bateria
+
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
@@ -49,10 +54,12 @@ void Robot::init(){
 void Robot::controlCallback(){
 	uint16_t data[numLegMotors][2];
 	for(uint32_t i=0; i<numLegMotors; i++){
-		//legs[i]->move(0, 0);
 		f_read(&stepFile[0], data[i], 4, NULL);
 	}
-	batteryVoltage();
+	if(batteryVoltage() < VOLTAGE_LOW){
+		//Rotina para desligar os motores (pode ser no erro também)
+		error(ERR_LOW_BATTERY);
+	}
 }
 
 void Robot::setMovement(stepTypeDef step){
@@ -77,7 +84,7 @@ void Robot::leds(uint8_t binary){
 }
 
 float Robot::batteryVoltage(){
-	float voltage = battInt*1.0;	//12 bits
+	float voltage = battInt*VOLTAGE_CONVERSION;	//12 bits
 	HAL_ADC_Stop_DMA(&hadc1);
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&battInt, 1);
 	return voltage;
