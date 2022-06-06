@@ -11,6 +11,7 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
+extern ADC_HandleTypeDef hadc1;
 
 Robot::Robot() {
 	legs[0] = new Dynamixel(&huart1, 0);
@@ -51,6 +52,7 @@ void Robot::controlCallback(){
 		//legs[i]->move(0, 0);
 		f_read(&stepFile[0], data[i], 4, NULL);
 	}
+	batteryVoltage();
 }
 
 void Robot::setMovement(stepTypeDef step){
@@ -72,4 +74,11 @@ void Robot::leds(uint8_t binary){
 	HAL_GPIO_WritePin(LD4_GPIO_Port, LD4_Pin, (GPIO_PinState)((binary>>1) & 1));
 	HAL_GPIO_WritePin(LD5_GPIO_Port, LD5_Pin, (GPIO_PinState)((binary>>2) & 1));
 	HAL_GPIO_WritePin(LD6_GPIO_Port, LD6_Pin, (GPIO_PinState)((binary>>3) & 1));
+}
+
+float Robot::batteryVoltage(){
+	float voltage = battInt*1.0;	//12 bits
+	HAL_ADC_Stop_DMA(&hadc1);
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&battInt, 1);
+	return voltage;
 }

@@ -43,6 +43,7 @@ public:
 	void setMovement(stepTypeDef step);
 	void error(errorTypeDef error);
 	void leds(uint8_t binary);
+	float batteryVoltage();
 private:
 	static const uint32_t numLegMotors = 12;
 	static const uint32_t numArmMotors = 6;
@@ -61,6 +62,7 @@ private:
 	PWMServo* arms[numArmMotors];
 	float legsZeroArray[numLegMotors];
 	float armsZeroArray[numArmMotors];
+	volatile uint32_t battInt;
 };
 
 #endif /* SRC_COMPONENTS_ROBOT_HPP_ */
