@@ -62,7 +62,7 @@ private:
 	PWMServo* arms[numArmMotors];
 	float legsZeroArray[numLegMotors];
 	float armsZeroArray[numArmMotors];
-	volatile uint32_t battInt;
+	volatile uint32_t battInt = 4095;
 };
 
 #endif /* SRC_COMPONENTS_ROBOT_HPP_ */

@@ -55,6 +55,7 @@ void Robot::controlCallback(){
 	uint16_t data[numLegMotors][2];
 	for(uint32_t i=0; i<numLegMotors; i++){
 		f_read(&stepFile[0], data[i], 4, NULL);
+		legs[i]->moveInt(data[i][0], data[i][1]);
 	}
 	if(batteryVoltage() < VOLTAGE_LOW){
 		//Rotina para desligar os motores (pode ser no erro também)
