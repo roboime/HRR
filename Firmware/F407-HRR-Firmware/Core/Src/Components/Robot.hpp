@@ -22,14 +22,17 @@ public:
 		STEP_LEFT,
 		STEP_RIGHT,
 		STEP_STOP,
+		STEP_FIRST,
 		STEP_LAST,
-		STEP_FIRST
+		STEP_CLIMB,
+		STEP_DESCENT
 	};
 	enum errorTypeDef{
 		ERR_OK = 0,
 		ERR_NO_SD,
 		ERR_FILE_NOT_FOUND,
-		ERR_LOW_BATTERY
+		ERR_LOW_BATTERY,
+		ERR_MISC
 	};
 	enum statusTypeDef{
 		STATUS_NOT_INITIALIZED = 0,
@@ -47,22 +50,25 @@ public:
 private:
 	static const uint32_t numLegMotors = 12;
 	static const uint32_t numArmMotors = 6;
-	static const uint32_t controlFreq = 400;
-	static const uint32_t numStepTypes = 6;
+	static const uint32_t controlFreq = 100;
+	static const uint32_t numStepTypes = 8;
 	const std::string stepFilePaths[numStepTypes] = {
-			"0:Steps/frente.bin",
-			"0:Steps/esquerda.bin",
-			"0:Steps/direita.bin",
-			"0:Steps/parado.bin",
-			"0:Steps/0-3.bin",
-			"0:Steps/3-0.bin"
+			"0:Steps/forward.bin",
+			"0:Steps/left.bin",
+			"0:Steps/right.bin",
+			"0:Steps/stop.bin",
+			"0:Steps/first.bin",
+			"0:Steps/last.bin",
+			"0:Steps/climb.bin",
+			"0:Steps/descent.bin"
 	};
 	FIL stepFile[numStepTypes];
 	Dynamixel* legs[numLegMotors];
 	PWMServo* arms[numArmMotors];
-	float legsZeroArray[numLegMotors];
-	float armsZeroArray[numArmMotors];
 	volatile uint32_t battInt = 4095;
+	stepTypeDef currentStep = STEP_STOP;	//Começa parado
+	stepTypeDef desiredStep = STEP_STOP;
+	stepTypeDef nextStep();
 };
 
 #endif /* SRC_COMPONENTS_ROBOT_HPP_ */

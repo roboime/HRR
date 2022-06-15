@@ -12,16 +12,19 @@
 
 class Dynamixel {
 public:
-	Dynamixel(UART_HandleTypeDef* huartptr, uint8_t motorId);
+	Dynamixel(UART_HandleTypeDef* huartptr, uint8_t motorId, uint16_t zeroPos, uint16_t lowLimitPos, uint16_t highLimitPos);
 	void init();
-	void setZero(float pos);
-	void move(float pos, float spd);
-	void moveInt(uint16_t pos, uint16_t spd);
+	void setConfig();
+	void moveRelative(int16_t pos, uint16_t spd);
+	void moveDegRadPerSecond(float pos, float spd);
+	void moveAbsolute(uint16_t pos, uint16_t spd);
 private:
 	UART_HandleTypeDef* huartptr;
 	uint8_t motorId;
 	uint8_t uartBuf[64];
-	float zeroPos = 0;
+	uint16_t zero;
+	uint16_t lowLimit;
+	uint16_t highLimit;
 	void sendInstruction(uint8_t instruction, uint8_t* paramArray, uint8_t numParams);
 };
 

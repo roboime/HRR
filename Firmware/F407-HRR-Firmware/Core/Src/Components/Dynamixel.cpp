@@ -9,9 +9,15 @@
 
 Dynamixel::Dynamixel(
 		UART_HandleTypeDef* huartptr,
-		uint8_t motorId) :
+		uint8_t motorId,
+		uint16_t zero,
+		uint16_t lowLimit,
+		uint16_t highLimit) :
 		huartptr(huartptr),
-		motorId(motorId)
+		motorId(motorId),
+		zero(zero),
+		lowLimit(lowLimit),
+		highLimit(highLimit)
 {
 
 }
@@ -20,23 +26,35 @@ void Dynamixel::init(){
 
 }
 
-void Dynamixel::setZero(float pos){
-	zeroPos = pos;
+void Dynamixel::setConfig(){
+
 }
 
-/*void Dynamixel::move(float pos, float spd){
+void Dynamixel::moveRelative(int16_t pos, uint16_t spd){
+	int16_t absPos;
+	absPos = (pos + zero);
+	if (absPos >= lowLimit && absPos <= highLimit && spd < 1023){
+		//In range
+		moveAbsolute((uint16_t)absPos, spd);
+	}else{
+		//Out of range, não executa
+		//Deveria dar erro (será)?
+	}
+}
+
+/*void Dynamixel::moveDegRadPerSecond(float pos, float spd){
 	uint16_t intPos;
 	uint16_t intSpd;
 	intPos = 512+(pos-zeroPos)*0.1;		//Calcular sinais e valor das constantes
 	intSpd = spd*10;
 	if(intPos >=0 && intPos <1024){
-		moveInt(intPos, intSpd);
+		moveAbsolute(intPos, intSpd);
 	}
 }*/
 
-void Dynamixel::moveInt(uint16_t pos, uint16_t spd){
+void Dynamixel::moveAbsolute(uint16_t pos, uint16_t spd){
 	uint8_t paramArray[5];
-	paramArray[0] = 30;
+	paramArray[0] = 30;		//Goal position
 	paramArray[1] = pos;	//Conferir endianess
 	paramArray[2] = pos>>8;
 	paramArray[3] = spd;

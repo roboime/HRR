@@ -19,23 +19,23 @@ extern UART_HandleTypeDef huart6;
 extern ADC_HandleTypeDef hadc1;
 
 Robot::Robot() {
-	legs[0] = new Dynamixel(&huart1, 0);
-	legs[1] = new Dynamixel(&huart2, 0);
-	legs[2] = new Dynamixel(&huart3, 0);
-	legs[3] = new Dynamixel(&huart6, 0);
-	legs[4] = new Dynamixel(&huart1, 1);
-	legs[5] = new Dynamixel(&huart2, 1);
-	legs[6] = new Dynamixel(&huart3, 1);
-	legs[7] = new Dynamixel(&huart6, 1);
-	legs[8] = new Dynamixel(&huart1, 2);
-	legs[9] = new Dynamixel(&huart2, 2);
-	legs[10] = new Dynamixel(&huart3, 2);
-	legs[11] = new Dynamixel(&huart6, 2);
+
+	legs[0] = new Dynamixel(&huart1, 0, 512, 0, 1023);
+	legs[1] = new Dynamixel(&huart2, 0, 512, 0, 1023);
+	legs[2] = new Dynamixel(&huart3, 0, 512, 0, 1023);
+	legs[3] = new Dynamixel(&huart6, 0, 512, 0, 1023);
+	legs[4] = new Dynamixel(&huart1, 1, 512, 0, 1023);
+	legs[5] = new Dynamixel(&huart2, 1, 512, 0, 1023);
+	legs[6] = new Dynamixel(&huart3, 1, 512, 0, 1023);
+	legs[7] = new Dynamixel(&huart6, 1, 512, 0, 1023);
+	legs[8] = new Dynamixel(&huart1, 2, 512, 0, 1023);
+	legs[9] = new Dynamixel(&huart2, 2, 512, 0, 1023);
+	legs[10] = new Dynamixel(&huart3, 2, 512, 0, 1023);
+	legs[11] = new Dynamixel(&huart6, 2, 512, 0, 1023);
 }
 
 void Robot::init(){
 	FRESULT res[numStepTypes];
-	//TODO: Conferir os passos de transição 4 e 5
 	for (uint32_t i=0; i<numStepTypes; i++){
 		res[i] = f_open(&stepFile[i], stepFilePaths[i].c_str(), FA_OPEN_EXISTING | FA_READ);
 		if(res[i]){
@@ -45,6 +45,8 @@ void Robot::init(){
 			}else if(res[i] == FR_NO_FILE || res[i] == FR_NO_PATH){
 				//Arquivo não encontrado
 				error(ERR_FILE_NOT_FOUND);
+			}else{
+				error(ERR_MISC);
 			}
 		}
 	}
@@ -54,17 +56,25 @@ void Robot::init(){
 void Robot::controlCallback(){
 	uint16_t data[numLegMotors][2];
 	for(uint32_t i=0; i<numLegMotors; i++){
-		f_read(&stepFile[0], data[i], 4, NULL);
-		legs[i]->moveInt(data[i][0], data[i][1]);
+		if(f_read(&stepFile[currentStep], data[i], 4, nullptr) != FR_OK){
+			//SD removido
+			error(ERR_NO_SD);
+		}
+		legs[i]->moveRelative(data[i][0], data[i][1]);
+	}
+	if(f_eof(&stepFile[currentStep])){
+		//EOF
+		f_rewind(&stepFile[currentStep]);
 	}
 	if(batteryVoltage() < VOLTAGE_LOW){
 		//Rotina para desligar os motores (pode ser no erro também)
 		error(ERR_LOW_BATTERY);
 	}
+	currentStep = nextStep();
 }
 
 void Robot::setMovement(stepTypeDef step){
-
+	desiredStep = step;
 }
 
 void Robot::error(errorTypeDef error){
@@ -89,4 +99,66 @@ float Robot::batteryVoltage(){
 	HAL_ADC_Stop_DMA(&hadc1);
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&battInt, 1);
 	return voltage;
+}
+
+Robot::stepTypeDef Robot::nextStep(){
+	switch (currentStep){
+	case STEP_FORWARD:
+		if(desiredStep == STEP_FORWARD){
+			return STEP_FORWARD;
+		}else{
+			return STEP_LAST;
+		}
+		break;
+	case STEP_LEFT:
+		if(desiredStep == STEP_FORWARD){
+			return STEP_FIRST;
+		}else{
+			return desiredStep;
+		}
+		break;
+	case STEP_RIGHT:
+		if(desiredStep == STEP_FORWARD){
+			return STEP_FIRST;
+		}else{
+			return desiredStep;
+		}
+		break;
+	case STEP_STOP:
+		if(desiredStep == STEP_FORWARD){
+			return STEP_FIRST;
+		}else{
+			return desiredStep;
+		}
+		break;
+	case STEP_FIRST:
+		if(desiredStep == STEP_FORWARD){
+			return STEP_FORWARD;
+		}else{
+			return STEP_LAST;
+		}
+		break;
+	case STEP_LAST:
+		if(desiredStep == STEP_FORWARD){
+			return STEP_FIRST;
+		}else{
+			return desiredStep;
+		}
+		break;
+	case STEP_CLIMB:
+		if(desiredStep == STEP_FORWARD){
+			return STEP_FIRST;
+		}else{
+			return desiredStep;
+		}
+		break;
+	case STEP_DESCENT:
+		if(desiredStep == STEP_FORWARD){
+			return STEP_FIRST;
+		}else{
+			return desiredStep;
+		}
+		break;
+	}
+	return STEP_STOP;	//Para não dar warning na compilação
 }
