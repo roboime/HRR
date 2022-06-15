@@ -7,17 +7,17 @@ Controlar os motores AX-12A e MX-28T das pernas do robô por protocolo UART half 
 
 ### Features a serem implementados
 
-- [ ] Colocar código para rodar no STM32
-- [ ] Controle dos motores das pernas
+- [x] Colocar código para rodar no STM32
+- [x] Controle dos motores das pernas
 - [ ] Feedback dos motores das pernas
 - [ ] Controle dos motores dos braços
-- [ ] Leitura do CSV da mecatrônica
-- [ ] Diferentes tipos de passos
-- [ ] Comunicação com inteligência
+- [x] Leitura do CSV da mecatrônica
+- [x] Diferentes tipos de passos
+- [x] Comunicação com inteligência
 - [ ] Comunicação RF para telemetria
 - [ ] Interface gráfica no computador para telemetria
 - [ ] Acelerômetro para detecção e tratamento de quedas
-- [ ] Medição de carga da bateria e desligamento em carga baixa
+- [x] Medição de carga da bateria e desligamento em carga baixa
 - [ ] Gravação de log no cartão de memória
 
 ### Periféricos e pinos

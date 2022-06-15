@@ -61,16 +61,16 @@ void Robot::controlCallback(){
 		//Só troca de tipo de passo depois de o atual acabar
 		currentStep = nextStep();
 	}
+	if(batteryVoltage() < VOLTAGE_LOW){
+		//Rotina para desligar os motores (pode ser no erro também)
+		error(ERR_LOW_BATTERY);
+	}
 	for(uint32_t i=0; i<numLegMotors; i++){
 		if(f_read(&stepFile[currentStep], data[i], 4, nullptr) != FR_OK){
 			//SD removido
 			error(ERR_NO_SD);
 		}
 		legs[i]->moveRelative(data[i][0], data[i][1]);
-	}
-	if(batteryVoltage() < VOLTAGE_LOW){
-		//Rotina para desligar os motores (pode ser no erro também)
-		error(ERR_LOW_BATTERY);
 	}
 }
 
