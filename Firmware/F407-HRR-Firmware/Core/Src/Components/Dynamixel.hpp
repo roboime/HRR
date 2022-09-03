@@ -26,6 +26,10 @@ private:
 	uint16_t lowLimit;
 	uint16_t highLimit;
 	void sendInstruction(uint8_t instruction, uint8_t* paramArray, uint8_t numParams);
+
+//Função nova adicionada:
+
+	void receivePackage(uint8_t instruction, uint8_t* paramArray, uint8_t numParams);
 };
 
 #endif /* SRC_COMPONENTS_DYNAMIXEL_HPP_ */

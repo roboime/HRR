@@ -53,6 +53,9 @@ void Dynamixel::moveRelative(int16_t pos, uint16_t spd){
 }*/
 
 void Dynamixel::moveAbsolute(uint16_t pos, uint16_t spd){
+	uint8_t paramArray2[2];
+	paramArray2[0]=36; // Present position (valores tabelados)
+	paramArray2[1]=2;
 	uint8_t paramArray[5];
 	paramArray[0] = 30;		//Goal position
 	paramArray[1] = pos;	//Conferir endianess
@@ -60,6 +63,10 @@ void Dynamixel::moveAbsolute(uint16_t pos, uint16_t spd){
 	paramArray[3] = spd;
 	paramArray[4] = spd>>8;
 	sendInstruction(0x03, paramArray, 5);
+	sendInstruction(0x02, paramArray2, 2);
+	HAL_HalfDuplex_EnableReceiver(huartptr);
+	HAL_UART_Receive(huartptr,)
+
 }
 
 void Dynamixel::sendInstruction(uint8_t instruction, uint8_t* paramArray, uint8_t numParams){
@@ -77,4 +84,23 @@ void Dynamixel::sendInstruction(uint8_t instruction, uint8_t* paramArray, uint8_
 	}
 	uartBuf[i+5] = ~(motorId + numParams + 2 + instruction + somaParams);	//Checksum
 	HAL_UART_Transmit_DMA(huartptr, uartBuf, numParams+6);
+}
+//Função nova adicionada, porém falta definir os parâmetros(?):
+
+void Dynamixel::receivePackage(uint8_t instruction, uint8_t* paramArray, uint8_t numParams){
+	while(huartptr->gState != HAL_UART_STATE_READY);	//Tem que implementar timeout
+		uartBuf[0] = 0xFF;				//Header
+		uartBuf[1] = 0xFF;				//Header
+		uartBuf[2] = motorId;			//ID
+		uartBuf[3] = numParams + 1;		//Length
+		uartBuf[4] = error;		//Falta achar como coloca o parâmetro do erro
+		uint8_t i;
+		uint8_t somaParams = 0;
+		for(i=0; i<numParams; i++){
+			uartBuf[i+5] = paramArray[i];	//Parameters
+			somaParams += paramArray[i];
+		}
+		uartBuf[i+5] = ~(motorId + numParams + 1 + instruction + somaParams);	//Checksum
+		HAL_UART_Receive_DMA(huartptr, uartBuf, numParams+6);
+
 }
