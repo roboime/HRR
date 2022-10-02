@@ -1,4 +1,0 @@
-../Core/Src/Components/Start.cpp:18:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	16	static
-../Core/Src/Components/Start.cpp:30:6:void Start()	8	static
-../Core/Src/Components/Start.cpp:35:1:cpp)	0	static
-../Core/Src/Components/Start.cpp:35:1:cpp)	16	static

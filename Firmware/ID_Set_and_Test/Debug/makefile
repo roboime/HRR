@@ -11,13 +11,11 @@ RM := rm -rf
 -include sources.mk
 -include USB_DEVICE/Target/subdir.mk
 -include USB_DEVICE/App/subdir.mk
--include Middlewares/Third_Party/FatFs/src/option/subdir.mk
--include Middlewares/Third_Party/FatFs/src/subdir.mk
 -include Middlewares/ST/STM32_USB_Device_Library/Core/Src/subdir.mk
 -include Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/subdir.mk
--include FATFS/Target/subdir.mk
--include FATFS/App/subdir.mk
 -include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
+-include Core/Startup/subdir.mk
+-include Core/Src/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -40,34 +38,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := Set_IDs+Teste_Motor
+BUILD_ARTIFACT_NAME := ID_Set_and_Test
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-Set_IDs+Teste_Motor.elf \
+ID_Set_and_Test.elf \
 
 MAP_FILES += \
-Set_IDs+Teste_Motor.map \
+ID_Set_and_Test.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-Set_IDs+Teste_Motor.list \
+ID_Set_and_Test.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: Set_IDs+Teste_Motor.elf secondary-outputs
+main-build: ID_Set_and_Test.elf secondary-outputs
 
 # Tool invocations
-Set_IDs+Teste_Motor.elf Set_IDs+Teste_Motor.map: $(OBJS) $(USER_OBJS) C:\Users\yannt\Documents\Roboime\HRR\Firmware\Set_IDs+Teste_Motor\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Set_IDs+Teste_Motor.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\yannt\Documents\Roboime\HRR\Firmware\Set_IDs+Teste_Motor\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Set_IDs+Teste_Motor.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+ID_Set_and_Test.elf ID_Set_and_Test.map: $(OBJS) $(USER_OBJS) C:\Users\yannt\STM32CubeIDE\workspace_1.8.0\ID_Set_and_Test\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "ID_Set_and_Test.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\yannt\STM32CubeIDE\workspace_1.8.0\ID_Set_and_Test\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ID_Set_and_Test.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -76,14 +74,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Set_IDs+Teste_Motor.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Set_IDs+Teste_Motor.list"
+ID_Set_and_Test.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "ID_Set_and_Test.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) Set_IDs+Teste_Motor.elf Set_IDs+Teste_Motor.list Set_IDs+Teste_Motor.map default.size.stdout
+	-$(RM) ID_Set_and_Test.elf ID_Set_and_Test.list ID_Set_and_Test.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
