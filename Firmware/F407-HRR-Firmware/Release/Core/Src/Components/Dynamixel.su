@@ -1,0 +1,6 @@
+../Core/Src/Components/Dynamixel.cpp:10:1:Dynamixel::Dynamixel(UART_HandleTypeDef*, uint8_t, uint16_t, uint16_t, uint16_t)	8	static
+../Core/Src/Components/Dynamixel.cpp:25:6:void Dynamixel::init()	0	static
+../Core/Src/Components/Dynamixel.cpp:29:6:void Dynamixel::setConfig()	0	static
+../Core/Src/Components/Dynamixel.cpp:83:6:void Dynamixel::sendInstruction(uint8_t, uint8_t*, uint8_t)	20	static
+../Core/Src/Components/Dynamixel.cpp:55:6:void Dynamixel::moveAbsolute(uint16_t, uint16_t)	40	static
+../Core/Src/Components/Dynamixel.cpp:33:6:void Dynamixel::moveRelative(int16_t, uint16_t)	12	static
