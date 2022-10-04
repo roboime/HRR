@@ -6,6 +6,7 @@
  */
 
 #include "Robot.hpp"
+#include "Defines.hpp"
 
 #define RL 2200		//R3 da placa
 #define RH 10000	//R2 da placa
@@ -35,6 +36,23 @@ Robot::Robot() {
 }
 
 void Robot::init(){
+#ifdef SETID
+	uint8_t id;
+	for(uint32_t i=0; i<2000; i++){
+		leds(id);
+		if(!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)){
+			id = (id+1) % 3;	//São 3 ID possiveis
+			i=0;
+			HAL_Delay(2);
+			while(!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin));
+		}
+		HAL_Delay(1);
+	}
+	for (int i=0; i<4; i++){
+		legs[i]->setId(1);
+	}
+	error((errorTypeDef)15);	//Pisca os leds para avisar que gravou
+#else
 	FRESULT res[numStepTypes];
 	for (uint32_t i=0; i<numStepTypes; i++){
 		res[i] = f_open(&stepFile[i], stepFilePaths[i].c_str(), FA_OPEN_EXISTING | FA_READ);
@@ -51,6 +69,7 @@ void Robot::init(){
 		}
 	}
 	leds(status = STATUS_READY);
+#endif
 }
 
 void Robot::controlCallback(){

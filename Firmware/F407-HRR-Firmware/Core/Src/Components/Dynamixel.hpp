@@ -18,6 +18,7 @@ public:
 	void moveRelative(int16_t pos, uint16_t spd);
 	void moveDegRadPerSecond(float pos, float spd);
 	void moveAbsolute(uint16_t pos, uint16_t spd);
+	void setId(uint8_t id);
 private:
 	UART_HandleTypeDef* huartptr;
 	uint8_t motorId;
