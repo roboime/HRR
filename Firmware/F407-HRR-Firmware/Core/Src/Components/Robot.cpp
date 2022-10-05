@@ -37,7 +37,7 @@ Robot::Robot() {
 
 void Robot::init(){
 #ifdef SETID
-	uint8_t id;
+	uint8_t id = 0;
 	for(uint32_t i=0; i<2000; i++){
 		leds(id);
 		if(!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)){
