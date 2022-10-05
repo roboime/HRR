@@ -26,6 +26,7 @@ private:
 	uint16_t lowLimit;
 	uint16_t highLimit;
 	void sendInstruction(uint8_t instruction, uint8_t* paramArray, uint8_t numParams);
+	void sendInstruction2(uint8_t instruction, uint8_t* paramArray, uint8_t numParams);
 
 //Função nova adicionada:
 
