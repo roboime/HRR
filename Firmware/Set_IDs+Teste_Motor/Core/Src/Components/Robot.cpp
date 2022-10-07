@@ -56,7 +56,7 @@ void Robot::init(){
 
 void Robot::controlCallback(){
 	uint16_t data[numLegMotors][2];
-	if(f_eof(&stepFile[currentStep])){
+	/*if(f_eof(&stepFile[currentStep])){
 		//EOF
 		f_rewind(&stepFile[currentStep]);
 		//Só troca de tipo de passo depois de o atual acabar
@@ -65,7 +65,7 @@ void Robot::controlCallback(){
 	if(batteryVoltage() < VOLTAGE_LOW){
 		//Rotina para desligar os motores (pode ser no erro também)
 		// error(ERR_LOW_BATTERY);
-	}
+	}*/
 
 	for(uint32_t i=0; i<numLegMotors; i++){
 		//if(f_read(&stepFile[currentStep], data[i], 4, nullptr) != FR_OK){

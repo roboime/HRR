@@ -29,8 +29,8 @@ void Dynamixel::init(){
 void Dynamixel::setConfig(){
 
 	uint8_t paramArray4[2];
-		paramArray4[0]=03; //"Starting adress"
-		paramArray4[1]=00; //novo ID? (se mudar tem q mudar o uartbuf2 do sendInstruction)
+		paramArray4[0]=03; //"Starting adress" de ID
+		paramArray4[1]=00; //novo ID (se mudar tem q mudar o uartbuf2 do sendInstruction)
 		sendInstruction2(0x03, paramArray4, 2); // envia a instrução de write ID
 
 
@@ -61,7 +61,7 @@ void Dynamixel::moveRelative(int16_t pos, uint16_t spd){
 }*/
 
 void Dynamixel::moveAbsolute(uint16_t pos, uint16_t spd){
-		uint8_t rxBuf[7] = {0};  // buffer vazio pra receber o status packet
+		uint8_t rxBuf[7] = {0};  // buffer vazio pra receber o status package
 		uint8_t paramArray2[2];  // buffer q vai conter a instruçao de read position
 		uint8_t paramArray3[2];  // buffer q vai conter a instruçao de read speed
 		paramArray2[0] = 36; // Present position (valores tabelados)
@@ -92,7 +92,7 @@ void Dynamixel::sendInstruction(uint8_t instruction, uint8_t* paramArray, uint8_
 	while(huartptr->gState != HAL_UART_STATE_READY);	//Tem que implementar timeout
 	uartBuf[0] = 0xFF;				//Header
 	uartBuf[1] = 0xFF;				//Header
-	uartBuf[2] = 00;			//ID (precisa mudar quando mudar o "novo ID")
+	uartBuf[2] = 0x00;			//ID (precisa mudar quando mudar o "novo ID")
 	uartBuf[3] = numParams + 2;		//Length
 	uartBuf[4] = instruction;		//Instruction
 	uint8_t i;
@@ -101,7 +101,7 @@ void Dynamixel::sendInstruction(uint8_t instruction, uint8_t* paramArray, uint8_
 		uartBuf[i+5] = paramArray[i];	//Parameters
 		somaParams += paramArray[i];
 	}
-	uartBuf[i+5] = ~(00 + numParams + 2 + instruction + somaParams);	//Checksum
+	uartBuf[i+5] = ~(motorId + numParams + 2 + instruction + somaParams);	//Checksum
 	HAL_UART_Transmit_DMA(huartptr, uartBuf, numParams+6);
 }
 

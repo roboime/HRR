@@ -90,7 +90,13 @@ static void MX_UART4_Init(void);
 	uint8_t paramArray[2];  // contem os parametros de setar id
 	uint8_t paramArray2[5];  // parametros da primeira posiçao
 	uint8_t paramArray3[5];  // parametros da segunda posiçao
-	uint8_t motorId;
+	uint8_t motorId = 0xFE;  // ID de broadcast
+	uint8_t novoId = 0x00;	 //novo ID (se mudar tem q mudar o uartbuf2 do sendInstruction)
+	uint8_t paramArray[2];  // array com os parametros de set id
+	uint16_t pos1 = 1000;
+	uint16_t pos2 = 500;
+	uint16_t spd = 500;
+
 
   void sendInstruction(uint8_t instruction, uint8_t* paramArray, uint8_t numParams){
 	  //while(huartptr->gState != HAL_UART_STATE_READY);	//Tem que implementar timeout
@@ -106,7 +112,7 @@ static void MX_UART4_Init(void);
 		  somaParams += paramArray[i];
 	  }
 	  uartBuf[i+5] = ~(motorId + numParams + 2 + instruction + somaParams);	//Checksum
-	  HAL_UART_Transmit_DMA(&huart1, uartBuf, numParams + 6);  //tem q ficar mudando a porta aqui
+	  HAL_UART_Transmit(&huart1, (uint8_t *)uartBuf, numParams + 6, 100);  //tem q ficar mudando a porta aqui
 }
 
 /* USER CODE END 0 */
@@ -127,7 +133,28 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  HAL_HalfDuplex_EnableTransmitter(&huart1);  // ativa o modo transmissor
 
+  paramArray[0] = 0x03; 		//Starting adress da instruçao de ID
+  paramArray[1] = novoId; 	//novo ID (se mudar tem q mudar o uartbuf2 do sendInstruction)
+
+  paramArray2[0] = 30;			//Goal position
+  paramArray2[1] = pos1;			//Conferir endianess
+  paramArray2[2] = pos1>>8;
+  paramArray2[3] = spd;
+  paramArray2[4] = spd>>8;
+
+  paramArray3[0] = 30;			//Goal position
+  paramArray3[1] = pos2;		//Conferir endianess
+  paramArray3[2] = pos2>>8;
+  paramArray3[3] = spd;
+  paramArray3[4] = spd>>8;
+  while(1){
+  sendInstruction(0x03, paramArray2, 5);
+  	  HAL_Delay(2000);
+  	  sendInstruction(0x03, paramArray3, 5);
+  	  HAL_Delay(2000);
+  }
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -153,41 +180,14 @@ int main(void)
   MX_ADC1_Init();
   MX_UART4_Init();
   /* USER CODE BEGIN 2 */
-  	  uint8_t novoId = 0x00;
-  	  paramArray[0] = 0x03; 	//Starting adress da instruçao de ID
-  	  paramArray[1] = novoId; 	//novo ID (se mudar tem q mudar o uartbuf2 do sendInstruction)
-  	  motorId = 0xFE;  // ID de broadcast
-  	  uint16_t pos1 = 1000;
-  	  uint16_t pos2 = 500;
-  	  uint16_t spd = 500;
-
-  	  sendInstruction(0x03, paramArray, 2);  // set ID
-
-  	  motorId = novoId;
-
-  	  paramArray2[0] = 30;			//Goal position
-  	  paramArray2[1] = pos1;		//Conferir endianess
-  	  paramArray2[2] = pos1>>8;
-  	  paramArray2[3] = spd;
-  	  paramArray2[4] = spd>>8;
-
-  	  paramArray3[0] = 30;			//Goal position
-  	  paramArray3[1] = pos2;		//Conferir endianess
-  	  paramArray3[2] = pos2>>8;
-  	  paramArray3[3] = spd;
-  	  paramArray3[4] = spd>>8;
-
-
+  sendInstruction(0x03, paramArray, 2);  // set ID
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  sendInstruction(0x03, paramArray2, 5);
-	  HAL_Delay(2000);
-	  sendInstruction(0x03, paramArray3, 5);
-	  HAL_Delay(2000);
+
 
 
     /* USER CODE END WHILE */
@@ -565,10 +565,10 @@ static void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 1000000;
+  huart1.Init.BaudRate = 115200;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Parity = UART_PARITY_EVEN;
   huart1.Init.Mode = UART_MODE_TX_RX;
   huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
@@ -664,7 +664,7 @@ static void MX_USART6_UART_Init(void)
 
   /* USER CODE END USART6_Init 1 */
   huart6.Instance = USART6;
-  huart6.Init.BaudRate = 100000;
+  huart6.Init.BaudRate = 1000000;
   huart6.Init.WordLength = UART_WORDLENGTH_8B;
   huart6.Init.StopBits = UART_STOPBITS_1;
   huart6.Init.Parity = UART_PARITY_NONE;
