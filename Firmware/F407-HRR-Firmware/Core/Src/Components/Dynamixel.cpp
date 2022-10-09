@@ -33,7 +33,7 @@ void Dynamixel::setConfig(){
 void Dynamixel::moveRelative(int16_t pos, uint16_t spd){
 	int16_t absPos;
 	absPos = (pos + zero);
-	if (absPos >= lowLimit && absPos <= highLimit && spd < 1023){
+	if (absPos >= lowLimit && absPos <= highLimit && spd <= 1023){
 		//In range
 		moveAbsolute((uint16_t)absPos, spd);
 	}else{
@@ -67,7 +67,7 @@ void Dynamixel::moveAbsolute(uint16_t pos, uint16_t spd){
 	paramArray[3] = spd;
 	paramArray[4] = spd>>8;
 	sendInstruction(0x03, paramArray, 5);  // envia a instruçao de WRITE goal position
-	sendInstruction(0x02, paramArray2, 2);  // envia a instruçao de READ present position
+	/*sendInstruction(0x02, paramArray2, 2);  // envia a instruçao de READ present position
 	while(huartptr->gState != HAL_UART_STATE_READY); // tentativa de corrigir o bug, checa se a porta serial ta ocupada.
 	HAL_HalfDuplex_EnableReceiver(huartptr);  // ativa modo receptor
 	HAL_UART_Receive(huartptr, (uint8_t*) rxBuf, sizeof(rxBuf), 200);  // recebe o feedback no rxBuf
@@ -77,7 +77,7 @@ void Dynamixel::moveAbsolute(uint16_t pos, uint16_t spd){
 	HAL_HalfDuplex_EnableReceiver(huartptr);  // ativa modo receptor
 	HAL_UART_Receive(huartptr, (uint8_t*) rxBuf, sizeof(rxBuf), 200);  // recebe o feedback no rxBuf
 	HAL_HalfDuplex_EnableTransmitter(huartptr);  // ativa o modo transmissor dnv
-
+*/
 }
 
 void Dynamixel::setId(uint8_t id){

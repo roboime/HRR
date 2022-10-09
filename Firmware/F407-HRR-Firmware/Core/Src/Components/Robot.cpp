@@ -40,11 +40,11 @@ void Robot::init(){
 	uint8_t id = 0;
 	for(uint32_t i=0; i<2000; i++){
 		leds(id);
-		if(!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)){
+		if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)){
 			id = (id+1) % 3;	//São 3 ID possiveis
 			i=0;
 			HAL_Delay(2);
-			while(!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin));
+			while(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin));
 		}
 		HAL_Delay(1);
 	}
