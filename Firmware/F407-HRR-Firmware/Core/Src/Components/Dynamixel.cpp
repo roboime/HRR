@@ -88,9 +88,9 @@ void Dynamixel::setId(uint8_t id){
 	uartBuf[2] = 0xFE;			//ID
 	uartBuf[3] = 4;		//Length
 	uartBuf[4] = 0x03;		//Instruction
-	uartBuf[5] = 0x03;		//ID address
+	uartBuf[5] = 0x03;		//ID address (modif)
 	uartBuf[6] = id;
-	uartBuf[7] = ~(0xFE + 4 + 0x03 + 0x03 + id);	//Checksum
+	uartBuf[7] = ~(0xFE + 4 + 0x03 + 0x03 + id);	//Checksum (modif)
 	HAL_UART_Transmit_DMA(huartptr, uartBuf, 8);
 }
 
