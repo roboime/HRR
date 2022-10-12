@@ -21,18 +21,18 @@ extern ADC_HandleTypeDef hadc1;
 
 Robot::Robot() {
 
-	legs[0] = new Dynamixel(&huart1, 0, 512, 0, 1023);
-	legs[1] = new Dynamixel(&huart2, 0, 512, 0, 1023);
-	legs[2] = new Dynamixel(&huart3, 0, 512, 0, 1023);
-	legs[3] = new Dynamixel(&huart6, 0, 512, 0, 1023);
-	legs[4] = new Dynamixel(&huart1, 1, 512, 0, 1023);
-	legs[5] = new Dynamixel(&huart2, 1, 512, 0, 1023);
-	legs[6] = new Dynamixel(&huart3, 1, 512, 0, 1023);
-	legs[7] = new Dynamixel(&huart6, 1, 512, 0, 1023);
-	legs[8] = new Dynamixel(&huart1, 2, 512, 0, 1023);
-	legs[9] = new Dynamixel(&huart2, 2, 512, 0, 1023);
-	legs[10] = new Dynamixel(&huart3, 2, 512, 0, 1023);
-	legs[11] = new Dynamixel(&huart6, 2, 512, 0, 1023);
+	legs[0] = new Dynamixel(&huart1, 0, 0, 0, 4095);
+	legs[1] = new Dynamixel(&huart2, 0, 0, 0, 4095);
+	legs[2] = new Dynamixel(&huart3, 0, 0, 0, 4095);
+	legs[3] = new Dynamixel(&huart6, 0, 0, 0, 4095);
+	legs[4] = new Dynamixel(&huart1, 1, 0, 0, 4095);
+	legs[5] = new Dynamixel(&huart2, 1, 0, 0, 4095);
+	legs[6] = new Dynamixel(&huart3, 1, 0, 0, 4095);
+	legs[7] = new Dynamixel(&huart6, 1, 0, 0, 4095);
+	legs[8] = new Dynamixel(&huart1, 2, 0, 0, 4095);
+	legs[9] = new Dynamixel(&huart2, 2, 0, 0, 4095);
+	legs[10] = new Dynamixel(&huart3, 2, 0, 0, 4095);
+	legs[11] = new Dynamixel(&huart6, 2, 0, 0, 4095);
 }
 
 void Robot::init(){
@@ -50,6 +50,7 @@ void Robot::init(){
 	}
 	for (int i=0; i<4; i++){
 		legs[i]->setId(1);
+		legs[i]->setConfig();
 	}
 	error((errorTypeDef)15);	//Pisca os leds para avisar que gravou
 #else

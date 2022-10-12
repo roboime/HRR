@@ -24,10 +24,25 @@ Dynamixel::Dynamixel(
 
 void Dynamixel::init(){
 
+
 }
 
 void Dynamixel::setConfig(){
+//#ifdef FACTORY_RESET
+    // Factory Reset do MX-28, to its initial factory default settings
+	// vai resetar para o ID 1
 
+	while(huartptr->gState != HAL_UART_STATE_READY);	//Tem que implementar timeout
+	uartBuf[0] = 0xFF;				//Header
+	uartBuf[1] = 0xFF;				//Header
+	uartBuf[2] = 0x01;			//ID
+	uartBuf[3] = 2;		//Length
+	uartBuf[4] = 0x06;		//Instruction
+	uartBuf[5] = ~(0x01 + 2 + 0x06 );	//Checksum
+	HAL_UART_Transmit_DMA(huartptr, uartBuf, 6);
+//Lembrar de trocar o Baud Rate no ID adress no setID (modificação)
+/*#else
+#endif*/
 }
 
 void Dynamixel::moveRelative(int16_t pos, uint16_t spd){
@@ -66,7 +81,8 @@ void Dynamixel::moveAbsolute(uint16_t pos, uint16_t spd){
 	paramArray[2] = pos>>8;
 	paramArray[3] = spd;
 	paramArray[4] = spd>>8;
-	sendInstruction(0x03, paramArray, 5);  // envia a instruçao de WRITE goal position
+	sendInstruction(0x03, paramArray, 5);
+	// envia a instruçao de WRITE goal position
 	/*sendInstruction(0x02, paramArray2, 2);  // envia a instruçao de READ present position
 	while(huartptr->gState != HAL_UART_STATE_READY); // tentativa de corrigir o bug, checa se a porta serial ta ocupada.
 	HAL_HalfDuplex_EnableReceiver(huartptr);  // ativa modo receptor
@@ -88,10 +104,11 @@ void Dynamixel::setId(uint8_t id){
 	uartBuf[2] = 0xFE;			//ID
 	uartBuf[3] = 4;		//Length
 	uartBuf[4] = 0x03;		//Instruction
-	uartBuf[5] = 0x03;		//ID address (modif)
+	uartBuf[5] = 0x03;		//ID address (modificação: muda pra 0x04 pra comunicar o Baud Rate pra 1M)
 	uartBuf[6] = id;
-	uartBuf[7] = ~(0xFE + 4 + 0x03 + 0x03 + id);	//Checksum (modif)
+	uartBuf[7] = ~(0xFE + 4 + 0x03 + 0x03 + id);	//Checksum (modificação) *LEMBRE DE MUDAR*
 	HAL_UART_Transmit_DMA(huartptr, uartBuf, 8);
+	// Para setar Baud Rate de 1M pressione o botão azul uma vez (modificação)
 }
 
 void Dynamixel::sendInstruction(uint8_t instruction, uint8_t* paramArray, uint8_t numParams){
