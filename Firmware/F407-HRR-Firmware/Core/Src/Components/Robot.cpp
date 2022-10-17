@@ -21,18 +21,18 @@ extern ADC_HandleTypeDef hadc1;
 
 Robot::Robot() {
 
-	legs[0] = new Dynamixel(&huart1, 0, 0, 0, 4095);	//5 da mecatronica
-	legs[1] = new Dynamixel(&huart2, 0, 0, 0, 4095);	//3 da mecatronica
-	legs[2] = new Dynamixel(&huart3, 0, 0, 0, 4095);	//4 da mecatronica
-	legs[3] = new Dynamixel(&huart6, 0, 0, 0, 4095);	//2 da mecatronica
-	legs[4] = new Dynamixel(&huart1, 1, 0, 0, 4095);	//6 da mecatronica
-	legs[5] = new Dynamixel(&huart2, 1, 0, 0, 4095);	//8 da mecatronica
-	legs[6] = new Dynamixel(&huart3, 1, 0, 0, 4095);	//7 da mecatronica
-	legs[7] = new Dynamixel(&huart6, 1, 0, 0, 4095);	//1 da mecatronica
-	legs[8] = new Dynamixel(&huart1, 2, 0, 0, 4095);	//10 da mecatronica
-	legs[9] = new Dynamixel(&huart2, 2, 0, 0, 4095);	//11 da mecatronica
-	legs[10] = new Dynamixel(&huart3, 2, 0, 0, 4095);	//0 da mecatronica
-	legs[11] = new Dynamixel(&huart6, 2, 0, 0, 4095);	//10 da mecatronica
+	legs[5] = new Dynamixel(&huart1, 0, 358, 0 + 358, 1023 + 358);	//5 da mecatronica
+	legs[3] = new Dynamixel(&huart2, 0, 358, 0 + 358, 1023 + 358);	//3 da mecatronica
+	legs[4] = new Dynamixel(&huart3, 0, 2048, 0, 4095 + 2048);	//4 da mecatronica <-
+	legs[2] = new Dynamixel(&huart6, 0, , 2048, 4095 + 2048);	//2 da mecatronica
+	legs[6] = new Dynamixel(&huart1, 1, 358, 0 + 358, 1023 + 358);	//6 da mecatronica
+	legs[8] = new Dynamixel(&huart2, 1, 358, 0 + 358, 1023 + 358);	//8 da mecatronica
+	legs[7] = new Dynamixel(&huart3, 1, 2048, 0, 4095 + 2048);	//7 da mecatronica <-
+	legs[1] = new Dynamixel(&huart6, 1, 358, 0 + 358, 1023 + 358);	//1 da mecatronica
+	legs[10] = new Dynamixel(&huart1, 2, 358, 0 + 358, 1023 + 358);	//10 da mecatronica
+	legs[11] = new Dynamixel(&huart2, 2, 358, 0 + 358, 1023 + 358);	//11 da mecatronica
+	legs[0] = new Dynamixel(&huart3, 2, 358, 0 + 358, 1023 + 358);	//0 da mecatronica
+	legs[9] = new Dynamixel(&huart6, 2, 2048, 0, 4095 + 2048);	//9 da mecatronica
 }
 
 void Robot::init(){
