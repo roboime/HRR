@@ -8,9 +8,9 @@
 #ifndef SRC_COMPONENTS_DEFINES_HPP_
 #define SRC_COMPONENTS_DEFINES_HPP_
 
-#define SETID
+//#define SETID
 
-#define FACTORY_RESET
+//#define FACTORY_RESET
 
 
 #endif /* SRC_COMPONENTS_DEFINES_HPP_ */

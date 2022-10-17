@@ -11,7 +11,7 @@
 #define RL 2200		//R3 da placa
 #define RH 10000	//R2 da placa
 #define VOLTAGE_CONVERSION (RL+RH)*3.3/(RL*4096)	//VDD = 3.3v em ADC 12 bits
-#define VOLTAGE_LOW 10.5	//Limite inferior da voltagem da bateria
+#define VOLTAGE_LOW 10.0	//Limite inferior da voltagem da bateria
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
@@ -21,18 +21,18 @@ extern ADC_HandleTypeDef hadc1;
 
 Robot::Robot() {
 
-	legs[0] = new Dynamixel(&huart1, 0, 0, 0, 4095);
-	legs[1] = new Dynamixel(&huart2, 0, 0, 0, 4095);
-	legs[2] = new Dynamixel(&huart3, 0, 0, 0, 4095);
-	legs[3] = new Dynamixel(&huart6, 0, 0, 0, 4095);
-	legs[4] = new Dynamixel(&huart1, 1, 0, 0, 4095);
-	legs[5] = new Dynamixel(&huart2, 1, 0, 0, 4095);
-	legs[6] = new Dynamixel(&huart3, 1, 0, 0, 4095);
-	legs[7] = new Dynamixel(&huart6, 1, 0, 0, 4095);
-	legs[8] = new Dynamixel(&huart1, 2, 0, 0, 4095);
-	legs[9] = new Dynamixel(&huart2, 2, 0, 0, 4095);
-	legs[10] = new Dynamixel(&huart3, 2, 0, 0, 4095);
-	legs[11] = new Dynamixel(&huart6, 2, 0, 0, 4095);
+	legs[0] = new Dynamixel(&huart1, 0, 0, 0, 4095);	//5 da mecatronica
+	legs[1] = new Dynamixel(&huart2, 0, 0, 0, 4095);	//3 da mecatronica
+	legs[2] = new Dynamixel(&huart3, 0, 0, 0, 4095);	//4 da mecatronica
+	legs[3] = new Dynamixel(&huart6, 0, 0, 0, 4095);	//2 da mecatronica
+	legs[4] = new Dynamixel(&huart1, 1, 0, 0, 4095);	//6 da mecatronica
+	legs[5] = new Dynamixel(&huart2, 1, 0, 0, 4095);	//8 da mecatronica
+	legs[6] = new Dynamixel(&huart3, 1, 0, 0, 4095);	//7 da mecatronica
+	legs[7] = new Dynamixel(&huart6, 1, 0, 0, 4095);	//1 da mecatronica
+	legs[8] = new Dynamixel(&huart1, 2, 0, 0, 4095);	//10 da mecatronica
+	legs[9] = new Dynamixel(&huart2, 2, 0, 0, 4095);	//11 da mecatronica
+	legs[10] = new Dynamixel(&huart3, 2, 0, 0, 4095);	//0 da mecatronica
+	legs[11] = new Dynamixel(&huart6, 2, 0, 0, 4095);	//10 da mecatronica
 }
 
 void Robot::init(){
@@ -49,8 +49,8 @@ void Robot::init(){
 		HAL_Delay(1);
 	}
 	for (int i=0; i<4; i++){
-		legs[i]->setId(1);
-		legs[i]->setConfig();
+		legs[i]->setId(id);
+		//legs[i]->setConfig();
 	}
 	error((errorTypeDef)15);	//Pisca os leds para avisar que gravou
 #else
