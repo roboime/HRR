@@ -21,18 +21,18 @@ extern ADC_HandleTypeDef hadc1;
 
 Robot::Robot() {
 
-	legs[5] = new Dynamixel(&huart1, 0, 358, 0 + 358, 1023 + 358);	//5 da mecatronica
-	legs[3] = new Dynamixel(&huart2, 0, 358, 0 + 358, 1023 + 358);	//3 da mecatronica
-	legs[4] = new Dynamixel(&huart3, 0, 2048, 0, 4095 + 2048);	//4 da mecatronica <-
-	legs[2] = new Dynamixel(&huart6, 0, , 2048, 4095 + 2048);	//2 da mecatronica
-	legs[6] = new Dynamixel(&huart1, 1, 358, 0 + 358, 1023 + 358);	//6 da mecatronica
-	legs[8] = new Dynamixel(&huart2, 1, 358, 0 + 358, 1023 + 358);	//8 da mecatronica
-	legs[7] = new Dynamixel(&huart3, 1, 2048, 0, 4095 + 2048);	//7 da mecatronica <-
-	legs[1] = new Dynamixel(&huart6, 1, 358, 0 + 358, 1023 + 358);	//1 da mecatronica
-	legs[10] = new Dynamixel(&huart1, 2, 358, 0 + 358, 1023 + 358);	//10 da mecatronica
-	legs[11] = new Dynamixel(&huart2, 2, 358, 0 + 358, 1023 + 358);	//11 da mecatronica
-	legs[0] = new Dynamixel(&huart3, 2, 358, 0 + 358, 1023 + 358);	//0 da mecatronica
-	legs[9] = new Dynamixel(&huart6, 2, 2048, 0, 4095 + 2048);	//9 da mecatronica
+	legs[5] = new Dynamixel(&huart1, 0, 358, 0, 1023);	//5 da mecatronica
+	legs[3] = new Dynamixel(&huart2, 0, 358, 0, 1023);	//3 da mecatronica
+	legs[4] = new Dynamixel(&huart3, 0, 2048, 1707, 2389);	//4 da mecatronica <-
+	legs[2] = new Dynamixel(&huart6, 0, 2048 , 0, 4095);	//2 da mecatronica <-
+	legs[6] = new Dynamixel(&huart1, 1, 358, 0, 1023);	//6 da mecatronica
+	legs[8] = new Dynamixel(&huart2, 1, 358, 0, 1023);	//8 da mecatronica
+	legs[7] = new Dynamixel(&huart3, 1, 2048, 1707, 2389);	//7 da mecatronica
+	legs[1] = new Dynamixel(&huart6, 1, 358, 0, 1023);	//1 da mecatronica <- ok?
+	legs[10] = new Dynamixel(&huart1, 2, 358, 0, 1023);	//10 da mecatronica
+	legs[11] = new Dynamixel(&huart2, 2, 358, 256, 460);	//11 da mecatronica
+	legs[0] = new Dynamixel(&huart3, 2, 358, 256, 460);	//0 da mecatronica
+	legs[9] = new Dynamixel(&huart6, 2, 2048, 0, 4095);	//9 da mecatronica <- ok?
 }
 
 void Robot::init(){
@@ -49,8 +49,8 @@ void Robot::init(){
 		HAL_Delay(1);
 	}
 	for (int i=0; i<4; i++){
-		legs[i]->setId(id);
-		//legs[i]->setConfig();
+		legs[i]->setId(1);
+		legs[i]->setConfig();  //reseta sempre os motores de id 1
 	}
 	error((errorTypeDef)15);	//Pisca os leds para avisar que gravou
 #else

@@ -104,9 +104,9 @@ void Dynamixel::setId(uint8_t id){
 	uartBuf[2] = 0xFE;			//ID
 	uartBuf[3] = 4;		//Length
 	uartBuf[4] = 0x03;		//Instruction
-	uartBuf[5] = 0x03;		//ID address (modificação: muda pra 0x04 pra comunicar o Baud Rate pra 1M)
+	uartBuf[5] = 0x04;		//ID address (modificação: muda pra 0x04 pra comunicar o Baud Rate pra 1M)
 	uartBuf[6] = id;
-	uartBuf[7] = ~(0xFE + 4 + 0x03 + 0x03 + id);	//Checksum (modificação) *LEMBRE DE MUDAR*
+	uartBuf[7] = ~(0xFE + 4 + 0x03 + 0x04 + id);	//Checksum (modificação) *LEMBRE DE MUDAR*
 	HAL_UART_Transmit_DMA(huartptr, uartBuf, 8);
 	// Para setar Baud Rate de 1M pressione o botão azul uma vez (modificação)
 }
