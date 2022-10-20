@@ -25,7 +25,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		if (robot.status == Robot::STATUS_READY){
 			robot.controlCallback();	//Controle
 		}
-		HAL_GPIO_WritePin(GPIOE,  GPIO_PIN_2, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOE,  GPIO_PIN_2, GPIO_PIN_RESET);
 	}
 }
 
