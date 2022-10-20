@@ -17,6 +17,7 @@ Robot robot;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim==&htim6){
+		HAL_GPIO_WritePin(GPIOE,  GPIO_PIN_2, GPIO_PIN_SET);
 		uint8_t receivedByte;
 		if(HAL_UART_Receive(&huart4, &receivedByte, 1, 0) == HAL_OK){	//Verifica se recebeu byte na porta serial
 			robot.setMovement((Robot::stepTypeDef)(receivedByte - 48));	//Combinado com a intel de receber em ASCII
@@ -24,6 +25,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		if (robot.status == Robot::STATUS_READY){
 			robot.controlCallback();	//Controle
 		}
+		HAL_GPIO_WritePin(GPIOE,  GPIO_PIN_2, GPIO_PIN_SET);
 	}
 }
 
