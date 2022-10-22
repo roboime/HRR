@@ -31,7 +31,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
 void Start(){
 	robot.init();
-	robot.setMovement(Robot::STEP_FORWARD); // força o robo a andar
+	// robot.setMovement(Robot::STEP_FORWARD); // Força o robô a andar, mas não vai ser necessário com o uso da Raspberry Pi
 	while (true){
 		//Não faz nada (tudo na interrupção e na máquina de estados)
 	}
