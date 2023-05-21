@@ -9,7 +9,7 @@
 #define SRC_COMPONENTS_DEFINES_HPP_
 
 //#define SETID
-
+#define POSTE
 //#define FACTORY_RESET
 
 

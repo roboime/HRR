@@ -36,6 +36,9 @@ Robot::Robot() {
 	}
 
 void Robot::init(){
+#ifdef POSTE
+
+#else
 #ifdef SETID
 	uint8_t id = 0;
 	for(uint32_t i=0; i<2000; i++){
@@ -71,9 +74,26 @@ void Robot::init(){
 	}
 	leds(status = STATUS_READY);
 #endif
+#endif
 }
 
 void Robot::controlCallback(){
+#ifdef POSTE
+	if(batteryVoltage() < VOLTAGE_LOW){
+		//Rotina para desligar os motores (pode ser no erro também)
+		error(ERR_LOW_BATTERY);
+	}
+	switch(desiredStep){
+	case STEP_FORWARD:
+		break;
+	case STEP_LEFT:
+		break;
+	case STEP_RIGHT:
+		break;
+	case STEP_STOP:
+		break;
+	}
+#else
 	uint16_t data[numLegMotors][2];
 	if(f_eof(&stepFile[currentStep])){
 		//EOF
@@ -92,6 +112,7 @@ void Robot::controlCallback(){
 		}
 		legs[i]->moveRelative(data[i][0], data[i][1]);
 	}
+#endif
 }
 
 void Robot::setMovement(stepTypeDef step){
