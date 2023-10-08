@@ -97,7 +97,7 @@ void Dynamixel::moveAbsolute(uint16_t pos, uint16_t spd){
 }
 
 void Dynamixel::setId(uint8_t id){
-	//Vai mandar para o ID de broadcast, ppor isso não dá para usar a sendInstruction
+	//Vai mandar para o ID de broadcast, por isso não dá para usar a sendInstruction
 	while(huartptr->gState != HAL_UART_STATE_READY);	//Tem que implementar timeout
 	uartBuf[0] = 0xFF;				//Header
 	uartBuf[1] = 0xFF;				//Header

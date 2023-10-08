@@ -11,7 +11,7 @@
 #define RL 2200		//R3 da placa
 #define RH 10000	//R2 da placa
 #define VOLTAGE_CONVERSION (RL+RH)*3.3/(RL*4096)	//VDD = 3.3v em ADC 12 bits
-#define VOLTAGE_LOW 10.0	//Limite inferior da voltagem da bateria
+#define VOLTAGE_LOW 0	//Limite inferior da voltagem da bateria
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
@@ -23,15 +23,15 @@ Robot::Robot() {
 //								Porta	ID	Zero Min Max
         legs[5] = new Dynamixel(&huart1, 0, 358, 0, 1023);	//5 da mecatronica PB6
 		legs[3] = new Dynamixel(&huart2, 0, 358, 0, 1023);	//3 da mecatronica PA2
-		legs[4] = new Dynamixel(&huart3, 0, 2048, 1707, 2389);	//4 da mecatronica PD8 <- n ligou
+		legs[4] = new Dynamixel(&huart3, 0, 358, 518, 725);	//4 da mecatronica PD8 <- n ligou // mudou pra AX
 		legs[2] = new Dynamixel(&huart6, 0, 2048, 0, 4095);	//2 da mecatronica PC6 <- mau contato
 		legs[6] = new Dynamixel(&huart1, 1, 358, 0, 1023);	//6 da mecatronica PB6
 		legs[8] = new Dynamixel(&huart2, 1, 358, 0, 1023);	//8 da mecatronica PA2
-		legs[7] = new Dynamixel(&huart3, 1, 2048, 1707, 2389);	//7 da mecatronica PD8
+		legs[7] = new Dynamixel(&huart3, 1, 621, 518, 725);	//7 da mecatronica PD8 // mudou pra AX
 		legs[1] = new Dynamixel(&huart6, 1, 358, 0, 1023);	//1 da mecatronica PC6  <- mau contato
 		legs[10] = new Dynamixel(&huart1, 2, 358, 0, 1023);	//10 da mecatronica PB6
-		legs[11] = new Dynamixel(&huart2, 2, 358, 256, 460);	//11 da mecatronica PA2
-		legs[0] = new Dynamixel(&huart3, 2, 358, 256, 460);	//0 da mecatronica PD8
+		legs[11] = new Dynamixel(&huart2, 2, 358, 256, 460); //11 da mecatronica PA2
+		legs[0] = new Dynamixel(&huart3, 2, 358, 256, 460);	//0 da mecatronica PD8 // olhando o robô de frente, começa na perna esquerda de baixo pra cima
 		legs[9] = new Dynamixel(&huart6, 2, 2048, 0, 4095);	//9 da mecatronica PC6 <- mau contato
 	}
 
@@ -39,7 +39,7 @@ void Robot::init(){
 #ifdef POSTE
 
 #else
-#ifdef SETID
+#ifdef SETID //se tiver dúvida olhe o comentário do defines
 	uint8_t id = 0;
 	for(uint32_t i=0; i<2000; i++){
 		leds(id);
@@ -55,7 +55,7 @@ void Robot::init(){
 		legs[i]->setId(id);
 		//legs[i]->setConfig();  //reseta sempre os motores de id 1
 	}
-	error((errorTypeDef)15);	//Pisca os leds para avisar que gravou
+	error((errorTypeDef)15);	//Pisca todos os leds para avisar que gravou
 #else
 	FRESULT res[numStepTypes];
 	for (uint32_t i=0; i<numStepTypes; i++){
