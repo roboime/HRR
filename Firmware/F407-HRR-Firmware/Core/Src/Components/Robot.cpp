@@ -23,7 +23,7 @@ Robot::Robot() {
 //								Porta	ID	Zero Min Max
         legs[5] = new Dynamixel(&huart1, 0, 358, 0, 1023);	//5 da mecatronica PB6
 		legs[3] = new Dynamixel(&huart2, 0, 358, 0, 1023);	//3 da mecatronica PA2
-		legs[4] = new Dynamixel(&huart3, 0, 358, 518, 725);	//4 da mecatronica PD8 <- n ligou // mudou pra AX
+		legs[4] = new Dynamixel(&huart3, 0, 621, 518, 725);	//4 da mecatronica PD8 <- n ligou // mudou pra AX
 		legs[2] = new Dynamixel(&huart6, 0, 2048, 0, 4095);	//2 da mecatronica PC6 <- mau contato
 		legs[6] = new Dynamixel(&huart1, 1, 358, 0, 1023);	//6 da mecatronica PB6
 		legs[8] = new Dynamixel(&huart2, 1, 358, 0, 1023);	//8 da mecatronica PA2
@@ -34,6 +34,11 @@ Robot::Robot() {
 		legs[0] = new Dynamixel(&huart3, 2, 358, 256, 460);	//0 da mecatronica PD8 // olhando o robô de frente, começa na perna esquerda de baixo pra cima
 		legs[9] = new Dynamixel(&huart6, 2, 2048, 0, 4095);	//9 da mecatronica PC6 <- mau contato
 	}
+//como saber qual pino da placa plugar os motores UART: apenas veja qual tipo de UART está ligado na discovery
+// em seguida siga o caminho físico do fio que se parte em outros 3, ache o data desses 3 fios e ligue os motores conforme
+// o código que está acima, por exemplo, se vc notou que o PB6(UART 1) está ligado nos outros 3 fios então os fios que seguem
+//serão datas com UART 1, dessa maneira, olhe no código quais motores tem huart1, que seriam os 5,6,10 e eles podem ser ligados em
+//qualquer ordem.
 
 void Robot::init(){
 #ifdef POSTE
