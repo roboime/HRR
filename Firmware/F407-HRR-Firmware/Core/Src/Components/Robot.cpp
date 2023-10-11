@@ -21,17 +21,17 @@ extern ADC_HandleTypeDef hadc1;
 
 Robot::Robot() {
 //								Porta	ID	Zero Min Max
-        legs[5] = new Dynamixel(&huart1, 0, 358, 0, 1023);	//5 da mecatronica PB6
-		legs[3] = new Dynamixel(&huart2, 0, 358, 0, 1023);	//3 da mecatronica PA2
-		legs[4] = new Dynamixel(&huart3, 0, 621, 518, 725);	//4 da mecatronica PD8 <- n ligou // mudou pra AX
-		legs[2] = new Dynamixel(&huart6, 0, 2048, 0, 4095);	//2 da mecatronica PC6 <- mau contato
-		legs[6] = new Dynamixel(&huart1, 1, 358, 0, 1023);	//6 da mecatronica PB6
-		legs[8] = new Dynamixel(&huart2, 1, 358, 0, 1023);	//8 da mecatronica PA2
-		legs[7] = new Dynamixel(&huart3, 1, 621, 518, 725);	//7 da mecatronica PD8 // mudou pra AX
-		legs[1] = new Dynamixel(&huart6, 1, 358, 0, 1023);	//1 da mecatronica PC6  <- mau contato
-		legs[10] = new Dynamixel(&huart1, 2, 358, 0, 1023);	//10 da mecatronica PB6
-		legs[11] = new Dynamixel(&huart2, 2, 358, 256, 460); //11 da mecatronica PA2
-		legs[0] = new Dynamixel(&huart3, 2, 358, 256, 460);	//0 da mecatronica PD8 // olhando o robô de frente, começa na perna esquerda de baixo pra cima
+        legs[5] = new Dynamixel(&huart1, 0, 357, 0, 1023);	//5 da mecatronica PB6 (ok)
+		legs[3] = new Dynamixel(&huart2, 0, 357, 0, 1023);	//3 da mecatronica PA2 (ok)
+		legs[4] = new Dynamixel(&huart3, 0, 512, 0, 1023);	//4 da mecatronica PD8 <- n ligou // mudou pra AX(ok)
+		legs[2] = new Dynamixel(&huart6, 0, 513, 0, 4095);	//2 da mecatronica PC6 <- mau contato
+		legs[6] = new Dynamixel(&huart1, 1, 977, 0, 1023);	//6 da mecatronica PB6 (ok)
+		legs[8] = new Dynamixel(&huart2, 1, 667, 0, 1023);	//8 da mecatronica PA2 (ok)
+		legs[7] = new Dynamixel(&huart3, 1, 220, 0, 1023);	//7 da mecatronica PD8 // mudou pra AX (ok)
+		legs[1] = new Dynamixel(&huart6, 1, 667, 0, 1023);	//1 da mecatronica PC6  <- mau contato (ok)
+		legs[10] = new Dynamixel(&huart1, 2, 357, 0, 1023);	//10 da mecatronica PB6 (ok)
+		legs[11] = new Dynamixel(&huart2, 2, 667, 256, 1023); //11 da mecatronica PA2 (ok)
+		legs[0] = new Dynamixel(&huart3, 2, 513, 256, 1023);	//(ok)0 da mecatronica PD8 // olhando o robô de frente, começa na perna esquerda de baixo pra cima
 		legs[9] = new Dynamixel(&huart6, 2, 2048, 0, 4095);	//9 da mecatronica PC6 <- mau contato
 	}
 //como saber qual pino da placa plugar os motores UART: apenas veja qual tipo de UART está ligado na discovery
@@ -104,7 +104,7 @@ void Robot::controlCallback(){
 		//EOF
 		f_rewind(&stepFile[currentStep]);
 		//Só troca de tipo de passo depois de o atual acabar
-		currentStep = nextStep();
+ 		currentStep = nextStep();
 	}
 	if(batteryVoltage() < VOLTAGE_LOW){
 		//Rotina para desligar os motores (pode ser no erro também)

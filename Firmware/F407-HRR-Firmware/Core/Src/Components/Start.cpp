@@ -31,7 +31,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
 void Start(){
 	robot.init();
-	robot.setMovement(Robot::STEP_FORWARD); // Força o robô a andar, mas não vai ser necessário com o uso da Raspberry Pi
+	uint32_t a = TIM6->ARR;
+	//para setar os zeros dos motores se baseiem no risco no disco do motor do datasheet dele e este risco será a metade da posiçao ou seja 512 ou 2048
+	//para saber se os zeros dos motores funcionaram comente a linha abaixo:
+	robot.setMovement(Robot::STEP_FORWARD); // (primeiro comando antes de a intel comunicar(no ex é step forward)) Força o robô a andar, mas não vai ser necessário com o uso da Raspberry Pi
 	while (true){
 		//Não faz nada (tudo na interrupção e na máquina de estados)
 	}
